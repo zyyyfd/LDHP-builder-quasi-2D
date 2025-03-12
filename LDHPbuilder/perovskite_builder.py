@@ -197,8 +197,6 @@ class InorganicMonolayer:
         
         Parameters
         ----------
-        A_site : str or atoms
-            the A site species
         B_site : str
             the B site species
         X_site : str
@@ -207,6 +205,14 @@ class InorganicMonolayer:
             the number of octahedra in the unit cell
         num_layer : int
             the number of layers of perovskite
+        A_site : str or atoms
+            the A site species
+        A_Rx : float
+            The desired x-rotation of the A cation (in degrees).
+        A_Ry : float
+            The desired y-rotation of the A cation (in degrees).
+        A_Rz : float
+            The desired z-rotation of the A cation (in degrees).  
         """
 
         assert B_site == 'Pb'
@@ -215,6 +221,7 @@ class InorganicMonolayer:
         if type(A_site) == str:
             A_site = Atoms(A_site, positions=[[0, 0, 0]])
             
+        """Adjust the A-position cation orientation"""    
         if A_Rx:
             A_site.rotate(A_Rx, 'x')
         if A_Ry:
@@ -255,7 +262,8 @@ class InorganicMonolayer:
                         [dist*(index_a + index_b), dist*(index_a - index_b), 0.0+dist/2**0.5+typical_distances[(B_site, X_site)]*2*index_c]        
                     ]
         monolayer = Atoms(symbols=species, positions=positions, cell=cell, pbc=[True, True, True])
-    
+        
+        """Add A-position cations"""
         if num_layer != 1:
             if num_unit_cell_octahedra==1:
                 for i in range(0,num_layer-1):
